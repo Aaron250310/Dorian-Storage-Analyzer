@@ -112,9 +112,8 @@ You don't need to use the command line at all:
 3. (Optional) Double-click **`Create Desktop Shortcut.bat`** once to add
    a "Dorian" shortcut to your Desktop, so you never need
    to open this folder again.
-4. (Optional) If you want AI-assisted analysis for ambiguous/unknown
-   items, copy `.env.example` to `.env` and add your Anthropic API key.
-   Without this, the app works fully using its local rule-based engine.
+4. (Optional) Want the real AI model instead of just the local rule-based
+   engine? See **"Setting up AI-assisted analysis"** below.
 
 ## Setup (manual / command line)
 
@@ -122,6 +121,77 @@ You don't need to use the command line at all:
 pip install -r requirements.txt
 python main.py
 ```
+
+## Setting up AI-assisted analysis (optional)
+
+By default, Dorian works **entirely offline** using its local rule-based
+engine — no account, no API key, no internet connection needed. This
+section is only for people who want Dorian to also consult a real AI
+model (Claude) for the items it's genuinely unsure about (anything still
+categorized "Unknown" after the rule-based pass).
+
+**What this does and doesn't change:** even with AI enabled, most items
+are still scored by the fast local rules — installers, cache folders,
+documents, games, dev projects, etc. The AI is only consulted for the
+ambiguous leftovers, and only lightweight metadata is ever sent to it
+(file name, extension, size, dates, category) — never file contents.
+
+### Steps
+
+1. **Get an API key** from the [Anthropic Console](https://console.anthropic.com/):
+   - Sign up or log in.
+   - Go to **Settings → API Keys** and click **Create Key**.
+   - Copy the key (it starts with `sk-ant-...`) — you won't be able to
+     see it again after leaving the page, so save it somewhere safe.
+   - Note: this requires setting up billing on your Anthropic account.
+     API usage is billed per request; since Dorian only calls the AI for
+     genuinely ambiguous items (not your whole drive), typical usage is
+     small, but you should check current pricing at
+     [anthropic.com/pricing](https://www.anthropic.com/pricing) before
+     relying on it heavily.
+
+2. **Create your `.env` file.** In the app's folder, copy `.env.example`
+   to a new file named exactly `.env` (Windows may hide the file
+   extension — make sure it isn't accidentally named `.env.txt`).
+
+3. **Add your key.** Open `.env` in Notepad and replace the placeholder:
+   ```
+   ANTHROPIC_API_KEY=sk-ant-your-actual-key-here
+   ```
+
+4. **(Optional) Choose a different model.** By default Dorian uses
+   `claude-haiku-4-5-20251001` (fast and inexpensive, well-suited to
+   quick per-item classification). To use a different Claude model,
+   uncomment and edit the `AI_MODEL` line in `.env`:
+   ```
+   AI_MODEL=claude-haiku-4-5-20251001
+   ```
+
+5. **Restart Dorian** (close it and re-run `Start Dorian.bat`) so it
+   picks up the new `.env` file.
+
+### How to tell it's working
+
+Open the **Activity Log** (the dropdown below the scan bar) and scan a
+folder with some genuinely unclear files in it. If the AI is being
+consulted, you'll see items whose "Why?" explanation includes a line
+like *"Refined by Dorian for an ambiguous item"* — that means the real
+model was called for that specific item, rather than only the local
+rules.
+
+If something's misconfigured (bad key, no internet, rate-limited, etc.),
+Dorian **fails silently back to the rule-based engine** rather than
+erroring out — so the app keeps working either way, but you won't see
+that "Refined by Dorian" line if the AI call didn't actually succeed.
+
+### Keeping your key private
+
+- `.env` is already listed in `.gitignore`, so it won't be committed if
+  you push this project to GitHub — double-check `git status` never
+  shows `.env` as a tracked file before pushing.
+- Never paste your API key into a chat, issue, or commit message.
+- If you ever suspect a key has leaked, revoke it immediately from the
+  Anthropic Console and generate a new one.
 
 ## How it works, step by step
 
