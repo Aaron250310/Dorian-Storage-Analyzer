@@ -9,12 +9,37 @@ echo ============================================
 where python >nul 2>nul
 if errorlevel 1 (
     echo.
-    echo Python was not found on your PATH.
-    echo Please install Python 3.10+ from https://python.org
-    echo and make sure to check "Add python.exe to PATH" during setup.
+    echo Python was not found on this computer. Attempting to install it
+    echo automatically ^(this only happens once^)...
+    echo.
+
+    where winget >nul 2>nul
+    if not errorlevel 1 (
+        echo Installing Python via winget - please approve any prompt that appears...
+        winget install -e --id Python.Python.3.12 --accept-source-agreements --accept-package-agreements
+    ) else (
+        echo winget isn't available on this system - downloading Python directly instead...
+        powershell -NoProfile -Command ^
+          "Invoke-WebRequest -Uri 'https://www.python.org/ftp/python/3.12.6/python-3.12.6-amd64.exe' -OutFile '%TEMP%\python-installer.exe'"
+        if not exist "%TEMP%\python-installer.exe" (
+            echo.
+            echo Automatic download failed. Please install Python 3.10+ manually from
+            echo https://python.org ^(check "Add python.exe to PATH" during setup^),
+            echo then run this file again.
+            echo.
+            pause
+            exit /b 1
+        )
+        echo Running the Python installer - please approve any prompt that appears...
+        "%TEMP%\python-installer.exe" /passive InstallAllUsers=0 PrependPath=1 Include_launcher=0
+    )
+
+    echo.
+    echo Python has been installed. Please close this window and double-click
+    echo "Start Dorian.bat" again to finish setup and launch the app.
     echo.
     pause
-    exit /b 1
+    exit /b 0
 )
 
 if not exist venv (

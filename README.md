@@ -100,14 +100,15 @@ You don't need to use the command line at all:
 
 1. Unzip this folder anywhere (e.g. your Desktop or Documents).
 2. Double-click **`Start Dorian.bat`**.
-   - The first time you run it, it automatically creates a private
-     Python environment (`venv/`) and installs everything the app needs
-     from `requirements.txt`. This only happens once — every run after
-     that starts instantly.
-   - Requires Python 3.10+ to already be installed
-     (get it from python.org, with "Add python.exe to PATH" checked
-     during setup — a one-time system requirement the app can't install
-     for you).
+   - **First run only:** if Python isn't already on your computer, the
+     script installs it automatically (via `winget` if available, or a
+     direct download from python.org otherwise) — you may see a Windows
+     prompt asking you to approve the installer, which is normal. Once
+     it finishes, close the window and double-click `Start Dorian.bat`
+     again to continue.
+   - It then automatically creates a private Python environment (`venv/`)
+     and installs everything the app needs from `requirements.txt`. This
+     also only happens once — every run after that starts instantly.
 3. (Optional) Double-click **`Create Desktop Shortcut.bat`** once to add
    a "Dorian" shortcut to your Desktop, so you never need
    to open this folder again.
@@ -182,3 +183,11 @@ Select folder
   recommendation or selected.
 - Running applications/games cannot be selected for deletion.
 - Unknown items are never pre-selected by "Select Recommended".
+
+## License
+
+This project is **not open source**. All rights are reserved by the
+copyright holder — see [`LICENSE`](LICENSE) for the full terms. You're
+welcome to view the source and run the app for your own personal,
+non-commercial use, but copying, modifying, redistributing, or using it
+commercially requires prior permission.
