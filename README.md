@@ -191,3 +191,16 @@ copyright holder — see [`LICENSE`](LICENSE) for the full terms. You're
 welcome to view the source and run the app for your own personal,
 non-commercial use, but copying, modifying, redistributing, or using it
 commercially requires prior permission.
+
+## Disclaimer
+
+Dorian is a helpful advisor, not an infallible one. Its importance/junk
+scores, category guesses, bundle detection, and duplicate matching are
+all best-effort — whether they come from the local rule-based engine or
+the optional AI model, they **can be wrong**, especially on unusual
+folder layouts or uncommon file types. Always review what's selected
+before confirming a deletion; the app is designed to make that easy
+(the "Why?" button, the confirmation dialogs, and defaulting to the
+Recycle Bin instead of permanent deletion), but the final call is always
+yours. Neither the app nor its author is responsible for data loss
+resulting from acting on its recommendations.

@@ -372,6 +372,11 @@ class App(tk.Tk):
             tk.Label(frame, textvariable=self.summary_vars[key], font=("Segoe UI", 10, "bold"),
                      bg=c["panel_bg"], fg=c["fg"], padx=16).pack(side="left")
 
+        tk.Label(
+            frame, text="\u26A0 Dorian can make mistakes \u2014 always review before deleting.",
+            font=("Segoe UI", 8, "italic"), bg=c["panel_bg"], fg=c["muted_fg"],
+        ).pack(side="right", padx=8)
+
     def _build_filter_bar(self):
         c = self.colors
         frame = tk.Frame(self, bg=c["bg"], padx=14, pady=8)
@@ -1068,6 +1073,13 @@ class App(tk.Tk):
             justify="left", anchor="w", padx=12, pady=10,
         ).pack(fill="x")
 
+        tk.Label(
+            win, text="\u26A0 Matches are based on file content hashing, which is reliable but not "
+                      "infallible \u2014 double-check before deleting.",
+            font=("Segoe UI", 9, "italic"), bg=c["panel_bg"], fg=c["muted_fg"],
+            wraplength=640, justify="left", anchor="w", padx=12,
+        ).pack(fill="x")
+
         tv = ttk.Treeview(win, columns=("sel", "size", "path"), show="headings", height=14)
         tv.heading("sel", text="")
         tv.heading("size", text="Size")
@@ -1223,6 +1235,12 @@ class App(tk.Tk):
         listbox.pack(fill="both", expand=True, padx=12)
         tk.Label(confirm, text=f"Total: {human_size(total_size)}", font=("Segoe UI", 10, "bold"),
                  bg=c["panel_bg"], fg=c["fg"], pady=8).pack()
+
+        tk.Label(
+            confirm,
+            text="\u26A0 Dorian's recommendations can be wrong. Double-check this list before continuing.",
+            font=("Segoe UI", 9, "italic"), bg=c["panel_bg"], fg=c["muted_fg"], wraplength=490,
+        ).pack(pady=(0, 4))
 
         confirm_var = tk.BooleanVar(value=False)
         if permanent:
